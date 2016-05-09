@@ -14,14 +14,14 @@ use yii\helpers\ArrayHelper;
 
 class UEditorAction extends Action
 {
-
     public $config = [];
 
     public function init(){
         \Yii::$app->request->enableCsrfValidation = false;
 
-        $_config_json = file_get_contents(__DIR__.'assets/php/config.json');
-        $_config = json_decode($_config_json, true);
+//        $_config_json = file_get_contents(__DIR__.'assets/php/config.json');
+//        $_config = json_decode($_config_json, true);
+        $_config = require(__DIR__ . '/config.php');
         $this->config = ArrayHelper::merge($_config, $this->config);
         parent::init();
     }

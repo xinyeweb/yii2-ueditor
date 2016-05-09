@@ -13,6 +13,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\InputWidget;
 
@@ -24,9 +25,14 @@ class UEditor extends InputWidget
     public function init(){
         $this->id = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->id;
         $this->_options = [
-            'serverUrl' => '',//圖片上傳地址
+            'serverUrl' =>  Url::to(['upload']),//圖片上傳地址
             'initialFrameWidth' => '100%',
             'initialFrameHeight' => '400',
+            'toolbars' => [
+                [
+                    'fullscreen', 'source', 'undo', 'redo',  'removeformat', 'lineheight', 'indent', 'simpleupload',
+                ],
+            ],
             'lang' => (strtolower(Yii::$app->language) == 'en-us') ? 'en' : 'zh-cn',
         ];
         $this->clientConfig = count($this->clientConfig)>0 ? ArrayHelper::merge($this->_options, $this->clientConfig) : $this->_options;
@@ -36,7 +42,7 @@ class UEditor extends InputWidget
     protected function registerClientScript(){
         UEditorAsset::register($this->view);
         $clientOptions = Json::encode($this->clientConfig);
-        $scripts = "UE.getEditor('".$this->id."','".$clientOptions."')";
+        $scripts = "UE.getEditor('" . $this->id . "',".$clientOptions.")";
         $this->view->registerJs($scripts, View::POS_READY);
     }
 
